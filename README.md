@@ -12,7 +12,7 @@
 | 1 | elite-longterm-memory | [GitHub](https://github.com/susu5/elite-longterm-memory) | 终极 AI 长期记忆系统，WAL 协议 + 向量检索 + git-notes + 云备份。防止跨对话失忆，支持 Cursor/Claude/ChatGPT/Copilot | NextFrontierBuilds | 需要 OPENAI_API_KEY 和 memory-lancedb 插件 |
 | 2 | github-onboarding | [GitHub](https://github.com/susu5/github-onboarding) | 引导用户完成 GitHub 注册 → 创建仓库 → 上传本地代码全流程，含 .gitignore 自动生成脚本 | zorro | 自建 Skill，首次安装于 2026-06-24 |
 | 3 | guizang-ppt-skill | [GitHub](https://github.com/susu5/guizang-ppt-skill) | 生成横向翻页网页 PPT（单 HTML 文件），支持"电子杂志 × 电子墨水"和"瑞士国际主义"两种风格 | 歸藏 (op7418) | 原仓库: github.com/op7418/guizang-ppt-skill |
-| 4 | html-report-generator | [GitHub](https://github.com/susu5/html-report-generator) | 内置 47 套 PPT 模板，自动将任意内容生成 5-15 页精美 HTML 报告（1017×720px），覆盖商务/科技/学术等场景 | susu5 | 触发词：生成报告、做成HTML、内容可视化 |
+| 4 | html-report-generator | [GitHub](https://github.com/susu5/html-report-generator) | 内置 47 套 PPT 模板，自动将任意内容生成 5-15 页精美 HTML 报告（1017×720px），覆盖商务/科技/学术等场景 | 未知 | 触发词：生成报告、做成HTML、内容可视化 |
 | 5 | tencent-sheet-images | [GitHub](https://github.com/susu5/tencent-sheet-images) | 从腾讯在线表格提取单元格图片，并结合行列文字进行图文对照阅读 | susu5 | 适用场景：产品流程图阅读、界面截图分析 |
 
 ---
