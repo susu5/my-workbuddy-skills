@@ -1,4 +1,4 @@
-# My WorkBuddy Skill List
+# My Agent Skill List
 
 > 个人 WorkBuddy Skill 使用清单与描述。
 > License: CC-BY 4.0 | 使用时请注明来源
