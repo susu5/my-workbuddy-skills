@@ -14,7 +14,7 @@
 | 3 | guizang-ppt-skill | [GitHub](https://github.com/susu5/guizang-ppt-skill) | 生成横向翻页网页 PPT（单 HTML 文件），支持"电子杂志 × 电子墨水"和"瑞士国际主义"两种风格 | 歸藏 (op7418) | 原仓库: github.com/op7418/guizang-ppt-skill |
 | 4 | html-report-generator | [GitHub](https://github.com/susu5/html-report-generator) | 内置 47 套 PPT 模板，自动将任意内容生成 5-15 页精美 HTML 报告（1017×720px），覆盖商务/科技/学术等场景 | 未知 | 触发词：生成报告、做成HTML、内容可视化 |
 | 5 | tencent-sheet-images | [GitHub](https://github.com/susu5/tencent-sheet-images) | 从腾讯在线表格提取单元格图片，并结合行列文字进行图文对照阅读 | susu5 | 适用场景：产品流程图阅读、界面截图分析 |
-| 6 | chain-evidence-data-analysis | [GitHub](https://github.com/susu5/chain-evidence-data-analysis) | 链路证据数据分析法 — 数据体检、链路追溯、统计验证、逻辑推理、证据分级、报告生成全流程 | susu5 | 原来自 Codex 技能库，安装于 2026-07-04 |
+| 6 | SUSU5-chain-evidence-data-analysis | [GitHub](https://github.com/susu5/chain-evidence-data-analysis) | SUSU5 链路证据数据分析法 — 先出分析方案、确认后再执行，含数据体检、统计验证、归因分析、报告产出全流程 | susu5 | 2026-07-08 升级为 SUSU5 品牌 + 强制确认流程 |
 
 ---
 
@@ -28,7 +28,7 @@
 | 开发工具 | github-onboarding |
 | 内容创作 | guizang-ppt-skill、html-report-generator |
 | 数据读取 | tencent-sheet-images |
-| 数据分析 | chain-evidence-data-analysis |
+| 数据分析 | SUSU5-chain-evidence-data-analysis |
 
 ### 按来源分类
 
