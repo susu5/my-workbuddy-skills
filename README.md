@@ -15,6 +15,7 @@
 | 4 | html-report-generator | [GitHub](https://github.com/susu5/html-report-generator) | 内置 47 套 PPT 模板，自动将任意内容生成 5-15 页精美 HTML 报告（1017×720px），覆盖商务/科技/学术等场景 | 未知 | 触发词：生成报告、做成HTML、内容可视化 |
 | 5 | tencent-sheet-images | [GitHub](https://github.com/susu5/tencent-sheet-images) | 从腾讯在线表格提取单元格图片，并结合行列文字进行图文对照阅读 | susu5 | 适用场景：产品流程图阅读、界面截图分析 |
 | 6 | SUSU5-chain-evidence-data-analysis | [GitHub](https://github.com/susu5/chain-evidence-data-analysis) | SUSU5 链路证据数据分析法 — 先出分析方案、确认后再执行，含数据体检、统计验证、归因分析、报告产出全流程 | susu5 | 2026-07-08 升级为 SUSU5 品牌 + 强制确认流程 |
+| 7 | susu5-social-carousel-maker | [GitHub](https://github.com/susu5/my-workbuddy-skills/tree/main/susu5-social-carousel-maker) | 社媒多图轮播内容生成 — 根据文章/主题/产品生成小红书/微信/视频号多图，含逐页策划、尺寸/风格选择、提示词组装、3 张小样确认流程 | susu5 | 2026-07-08 新增，含 README + CC-BY 4.0 LICENSE |
 
 ---
 
@@ -26,7 +27,7 @@
 |------|-------|
 | 记忆增强 | elite-longterm-memory |
 | 开发工具 | github-onboarding |
-| 内容创作 | guizang-ppt-skill、html-report-generator |
+| 内容创作 | guizang-ppt-skill、html-report-generator、susu5-social-carousel-maker |
 | 数据读取 | tencent-sheet-images |
 | 数据分析 | SUSU5-chain-evidence-data-analysis |
 
