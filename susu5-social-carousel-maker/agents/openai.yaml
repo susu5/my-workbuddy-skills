@@ -1,0 +1,6 @@
+interface:
+  display_name: "Susu5 Social Carousel Maker"
+  short_description: "社媒多图内容规划与 image2 生图提示词"
+  default_prompt: "Use $susu5-social-carousel-maker to turn my topic or article into a confirmed 小红书/社媒多图内容方案 with image2 prompts."
+policy:
+  allow_implicit_invocation: true
