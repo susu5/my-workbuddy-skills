@@ -1,0 +1,4 @@
+interface:
+  display_name: "SUSU5 销售追单顾问"
+  short_description: "结合客户聊天与基础资料生成高质量追单方案和自然销售话术"
+  default_prompt: "使用 $susu5-sales-followup-advisor 分析已拉取的聊天记录和用户基础信息，生成当前追单方案与销售话术。"
