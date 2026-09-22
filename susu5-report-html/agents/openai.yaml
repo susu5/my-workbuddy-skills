@@ -1,0 +1,6 @@
+interface:
+  display_name: "SUSU5 报告HTML v2.0.0"
+  short_description: "确认HTML输出即调用，根据内容推荐并展示四种风格供选择，清晰呈现图表与结论"
+  default_prompt: "使用 $susu5-report-html 制作清晰准确的离线HTML报告。先根据当前内容推荐一种风格，展示清晰商务、现代数据、温暖编辑、深色研判全部四种供我选择，再制作图表清楚、重点明确的报告。"
+policy:
+  allow_implicit_invocation: true

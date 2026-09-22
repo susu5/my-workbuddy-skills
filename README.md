@@ -17,6 +17,7 @@
 | 6 | SUSU5-chain-evidence-data-analysis | [GitHub](https://github.com/susu5/chain-evidence-data-analysis) | SUSU5 链路证据数据分析法 — 先出分析方案、确认后再执行，含数据体检、统计验证、归因分析、报告产出全流程 | susu5 | 2026-07-08 升级为 SUSU5 品牌 + 强制确认流程 |
 | 7 | susu5-social-carousel-maker | [GitHub](https://github.com/susu5/my-workbuddy-skills/tree/main/susu5-social-carousel-maker) | 社媒多图轮播内容生成 — 根据文章/主题/产品生成小红书/微信/视频号多图，含逐页策划、尺寸/风格选择、提示词组装、3 张小样确认流程 | susu5 | 2026-07-08 新增，含 README + CC-BY 4.0 LICENSE |
 | 8 | susu5-sales-followup-advisor | [GitHub](https://github.com/susu5/my-workbuddy-skills/tree/main/susu5-sales-followup-advisor) | R6 销售追单方案与话术生成 — 结合聊天记录和用户基础信息，生成事实分析、正确 A 链路和可直接发送的销售微信话术；含课包完成周期测算（课时额度/周频/有效期） | susu5 | 2026-08-24 升级 v02（新增 lesson-credit-duration-playbook），v01 于 2026-08-22 |
+| 9 | susu5-report-html | [GitHub](https://github.com/susu5/my-workbuddy-skills/tree/main/susu5-report-html) | 离线单文件 HTML 报告制作 — 四种风格（清晰商务/现代数据/温暖编辑/深色研判）先推荐后确认，多图多表、重点标注，含报告校验脚本与四风格预览模板 | susu5 | v2.0.0，2026-09-22 上架 |
 
 ---
 
@@ -29,6 +30,7 @@
 | 记忆增强 | elite-longterm-memory |
 | 开发工具 | github-onboarding |
 | 内容创作 | guizang-ppt-skill、html-report-generator、susu5-social-carousel-maker |
+| 报告输出 | susu5-report-html |
 | 数据读取 | tencent-sheet-images |
 | 数据分析 | SUSU5-chain-evidence-data-analysis |
 | 销售转化 | susu5-sales-followup-advisor |

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="susu5-report-html v2.0.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{REPORT_TITLE}}</title>
+<style>
+:root {
+  --page-bg:#fff; --panel:#fff; --text:#202f40; --muted:#536478;
+  --border:#d4dde7; --head-bg:#eef3f9; --stripe:#f7f9fc;
+  --blue:#205cad; --purple:#7050a0; --blue-soft:#edf4ff;
+  --red:#a82e3b; --red-soft:#fff0f1; --green:#176842; --green-soft:#edf8f2;
+  --yellow:#795500; --yellow-soft:#fff5d7; --insufficient:#536478;
+  --radius:2px; --panel-pad:26px; --chart-columns:1fr;
+}
+body[data-theme="clean-table"] {
+  --page-bg:#fff; --panel:#fff; --text:#202f40; --muted:#536478;
+  --border:#ccd7e3; --head-bg:#edf2f8; --stripe:#f7f9fc;
+  --blue:#205cad; --purple:#7050a0; --radius:2px; --chart-columns:1fr;
+}
+body[data-theme="light-glass"] {
+  --page-bg:#f2f5fa; --panel:#fff; --text:#202b3d; --muted:#536176;
+  --border:#d5deeb; --head-bg:#edf2fb; --stripe:#f7f9fd;
+  --blue:#255bc4; --purple:#744ba7; --blue-soft:#eef3ff;
+  --radius:12px; --chart-columns:repeat(2,minmax(0,1fr));
+}
+body[data-theme="editorial-brief"] {
+  --page-bg:#faf7f0; --panel:#faf7f0; --text:#332e28; --muted:#6b5f50;
+  --border:#d4c9b9; --head-bg:#efe9df; --stripe:#f5f0e7;
+  --blue:#315977; --purple:#805077; --blue-soft:#eaf0f2;
+  --red:#a13435; --red-soft:#fbe9e6; --green:#276341; --green-soft:#e9f3ea;
+  --yellow:#765115; --yellow-soft:#f5eacd; --insufficient:#6b5f50;
+  --radius:0px; --panel-pad:28px 0; --chart-columns:1fr;
+}
+body[data-theme="dark-analytics"] {
+  --page-bg:#131e2d; --panel:#1b293b; --text:#eff4fc; --muted:#bac8da;
+  --border:#52657e; --head-bg:#263950; --stripe:#213147;
+  --blue:#8ac6ff; --purple:#d0b2ff; --blue-soft:#223d58;
+  --red:#ffb2bc; --red-soft:#432d3b; --green:#9cddba; --green-soft:#233e39;
+  --yellow:#ffdc87; --yellow-soft:#3d382c; --insufficient:#bac8da;
+  --radius:4px; --chart-columns:repeat(2,minmax(0,1fr));
+}
+* {box-sizing:border-box}
+body {margin:0;background:var(--page-bg);color:var(--text);font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;font-size:18px;line-height:1.7}
+.shell {width:min(1200px,calc(100% - 64px));margin:0 auto}
+a {color:var(--blue);text-underline-offset:4px}
+p {margin:10px 0 16px}
+.report-header {padding:38px 0 24px}
+.eyebrow,.section-kicker {margin:0 0 8px;color:var(--blue);font-size:15px;font-weight:700}
+h1 {margin:0;font-size:36px;line-height:1.4;letter-spacing:.02em}
+h2 {margin:0;font-size:25px;line-height:1.5}
+h3 {margin:0 0 12px;font-size:20px;line-height:1.6}
+.meta {display:flex;flex-wrap:wrap;gap:6px 24px;color:var(--muted);font-size:15px;margin:12px 0 0}
+.verdict {padding:16px 20px;margin:22px 0 0;border-left:4px solid var(--blue);background:var(--blue-soft);font-size:20px;font-weight:600}
+.nav {display:flex;flex-wrap:wrap;gap:10px 24px;margin:0 0 28px;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);font-size:16px}
+.nav a {text-decoration:none}
+a:focus-visible,button:focus-visible,summary:focus-visible {outline:3px solid var(--blue);outline-offset:4px}
+main {padding-bottom:24px}
+section {margin:0 0 28px;scroll-margin-top:24px}
+.panel {padding:var(--panel-pad);border:1px solid var(--border);border-radius:var(--radius);background:var(--panel)}
+.section-head {margin:0 0 20px}
+.section-summary {margin:8px 0 0;color:var(--muted);font-size:16px;max-width:72ch}
+table {width:100%;border-collapse:collapse;table-layout:fixed;margin:16px 0;font-size:17px;font-variant-numeric:tabular-nums}
+caption {text-align:left;color:var(--muted);font-size:15px;padding:0 0 12px}
+th,td {padding:13px 16px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top;overflow-wrap:break-word}
+thead th {background:var(--head-bg);font-size:16px;font-weight:700}
+tbody th {font-weight:500}
+tbody tr:nth-child(even) {background:var(--stripe)}
+.number {text-align:right;font-variant-numeric:tabular-nums}
+.strong-number {font-size:26px;font-weight:700;line-height:1.4}
+.metric-primary,.metric-forecast {color:var(--blue);font-weight:700}
+.group-a {color:var(--blue)}
+.group-b {color:var(--purple)}
+.delta-negative {color:var(--red);font-weight:700}
+.delta-positive {color:var(--green);font-weight:700}
+.is-neutral,.is-insufficient {color:var(--muted)}
+.is-uncertain {color:var(--yellow)}
+.callout {padding:14px 18px;background:var(--yellow-soft);border-left:3px solid var(--yellow);font-size:16px}
+tbody tr.is-problem {background:var(--red-soft)}
+tbody tr.is-opportunity {background:var(--green-soft)}
+tr.is-problem > :first-child {border-left:3px solid var(--red)}
+tr.is-opportunity > :first-child {border-left:3px solid var(--green)}
+.note {display:block;color:var(--muted);font-size:15px;line-height:1.7;margin-top:8px}
+.chart-grid {display:grid;grid-template-columns:var(--chart-columns);gap:22px}
+.chart-card {min-width:0;margin:0;padding:20px;border:1px solid var(--border);background:var(--panel);border-radius:var(--radius)}
+.chart-card.wide {grid-column:1 / -1}
+.chart-card figcaption {font-weight:700;font-size:18px;margin:0 0 16px}
+.chart-card svg {display:block;width:100%;height:auto}
+.chart-card svg text {font-family:inherit;fill:var(--text)}
+.bar-row {margin:18px 0}
+.bar-label {display:flex;justify-content:space-between;gap:16px;font-size:16px;margin:0 0 6px}
+.bar-label strong {font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar-track {height:18px;background:var(--head-bg);border-left:1px solid var(--border)}
+.bar-fill {height:18px;max-width:100%;background:var(--blue)}
+.bar-fill.group-b {background:var(--purple)}
+.chart-scale {display:flex;justify-content:space-between;color:var(--muted);font-size:15px;border-top:1px solid var(--border);padding-top:6px;margin-top:16px}
+details {border-top:1px solid var(--border);padding:16px 0}
+summary {cursor:pointer;font-weight:600}
+footer {padding:24px 0 36px;border-top:1px solid var(--border);color:var(--muted);font-size:15px}
+body[data-theme="clean-table"] .report-header {border-top:6px solid #203e66}
+body[data-theme="clean-table"] .panel {border:0;border-top:2px solid var(--border);padding:24px 0}
+body[data-theme="clean-table"] thead th {border-bottom:2px solid #879ab0}
+body[data-theme="clean-table"] .chart-card {border:0;border-left:3px solid var(--border);padding:12px 24px}
+body[data-theme="light-glass"] h1 {border-left:6px solid var(--blue);padding-left:18px}
+body[data-theme="light-glass"] .chart-card {background:var(--stripe)}
+body[data-theme="light-glass"] #key-metrics {border-top:4px solid var(--blue)}
+body[data-theme="editorial-brief"] h1,body[data-theme="editorial-brief"] h2 {font-family:"Noto Serif CJK SC","Source Han Serif SC","Songti SC","SimSun",serif}
+body[data-theme="editorial-brief"] h1 {font-size:38px}
+body[data-theme="editorial-brief"] .panel {border:0;border-top:1px solid var(--border)}
+body[data-theme="editorial-brief"] .chart-card {border:0;border-top:1px solid var(--border);padding:24px 0}
+body[data-theme="editorial-brief"] th,body[data-theme="editorial-brief"] td {padding-top:16px;padding-bottom:16px}
+body[data-theme="editorial-brief"] .report-header {padding-top:48px}
+body[data-theme="dark-analytics"] .report-header {border-top:4px solid var(--blue)}
+body[data-theme="dark-analytics"] .verdict {background:transparent;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+body[data-theme="dark-analytics"] .section-kicker {letter-spacing:.08em}
+body[data-theme="dark-analytics"] thead th {border-bottom:2px solid #7b92ae}
+@media (max-width:900px) {
+  .shell {width:calc(100% - 48px)}
+  .chart-grid {grid-template-columns:1fr}
+  h1 {font-size:30px}
+  .panel {padding:20px 0}
+  body[data-theme="light-glass"] .panel,body[data-theme="dark-analytics"] .panel {padding:20px}
+}
+</style>
+</head>
+<body data-theme="{{REPORT_THEME}}">
+<div class="shell">
+<header class="report-header">
+<p class="eyebrow">{{REPORT_TYPE}}</p>
+<h1>{{REPORT_TITLE}}</h1>
+<div class="meta"><span>数据日期：{{DATA_DATE}}</span><span>统计截至：{{CUTOFF_TIME}}</span><span>数据范围：{{RECORD_COUNT}}</span></div>
+<p class="verdict">{{ONE_SENTENCE_CONCLUSION}}</p>
+</header>
+<nav class="nav" aria-label="报告章节"><a href="#summary">结论与核心对比</a><a href="#report-body">分项数据</a><a href="#notes">数据说明</a></nav>
+<main>
+<div id="summary" class="first-screen">
+<section class="panel" id="key-metrics">
+<div class="section-head"><p class="section-kicker">01 · 核心对比</p><h2>{{KEY_METRICS_TITLE}}</h2><p class="section-summary">{{KEY_METRICS_SUMMARY}}</p></div>
+<table><thead><tr>{{KEY_METRIC_HEADERS}}</tr></thead><tbody>{{KEY_METRIC_ROWS}}</tbody></table>
+</section>
+<section class="panel" id="priority-findings">
+<div class="section-head"><h2>{{PRIORITY_FINDINGS_TITLE}}</h2></div>
+<table><thead><tr><th scope="col">事项</th><th scope="col">数据证据</th><th scope="col">解释与限制</th><th scope="col">后续动作</th><th scope="col">负责人</th></tr></thead><tbody>{{PRIORITY_FINDING_ROWS}}</tbody></table>
+</section>
+</div>
+<div id="report-body">{{REPORT_SECTIONS}}</div>
+<section class="panel" id="notes"><div class="section-head"><h2>{{NOTES_TITLE}}</h2></div>{{DETAIL_SECTIONS}}</section>
+</main>
+<footer>数据来源：{{DATA_SOURCES}}<br>生成日期：{{GENERATED_DATE}} · 版本：{{REPORT_VERSION}}</footer>
+</div>
+</body>
+</html>
