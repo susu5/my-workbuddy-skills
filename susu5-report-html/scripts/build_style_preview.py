@@ -52,29 +52,30 @@ def render_demo(theme="clean-table", controls=False):
     if theme not in STYLES:
         raise ValueError("Unknown theme")
     template = (ROOT / "assets/report-template.html").read_text(encoding="utf-8")
-    metrics = table(GROUPS[0], "comparison-0")
-    key_headers = metrics.split("<thead><tr>", 1)[1].split("</tr></thead>", 1)[0]
-    key_rows = metrics.split("<tbody>", 1)[1].split("</tbody>", 1)[0]
-    sections = '<section class="panel"><div class="section-head"><p class="section-kicker">02 · 分项对比</p><h2>不同咨询阶段，分别比较</h2><p class="section-summary">先看人数与精确比例，再用同一刻度观察差异。</p></div>'
-    sections += ''.join(table(group, f"comparison-{index}") for index, group in enumerate(GROUPS[1:], 1))
-    sections += '<div class="chart-grid">' + ''.join(chart(group, f"chart-{index}") for index, group in enumerate(GROUPS[1:], 1)) + '</div></section>'
+    summary = '<div class="conclusion-grid">'
+    for label, total, buyers, rate, _ in GROUPS[0][2]:
+        summary += f'<article class="conclusion-card"><h3>{label}：总体买单比例</h3><span class="metric-status">虚构示例数据 · 2026年9月</span><p class="strong-number metric-primary">{rate}</p><p class="note">{buyers}名买单客户 / {total}名客户。仅展示数值，不能据此判断真实业务效果。</p></article>'
+    summary += '<article class="conclusion-card"><h3>比较结果的成立条件</h3><p>先核对样本与观察时间。</p><p class="note is-uncertain">真实报告须确认两组客户是否可比；本页所有数据均为虚构。</p></article></div>'
+    sections = '<section class="panel" id="key-metrics"><div class="section-head"><p class="section-kicker">02 · 核心对比</p><h2>总体人数与买单比例有什么差别？</h2><p class="section-summary">买单比例＝买单人数÷客户人数。蓝色与紫色区分方案，不表示好坏。</p></div>'
+    sections += table(GROUPS[0], 'comparison-0') + chart(GROUPS[0], 'chart-0') + '</section>'
+    sections += '<section class="panel"><div class="section-head"><p class="section-kicker">03 · 分项对比</p><h2>不同咨询阶段的差别是否一致？</h2><p class="section-summary">每组先给人数与精确比例，再用同一刻度观察差异。</p></div>'
+    for index, group in enumerate(GROUPS[1:], 1):
+        sections += '<h3>' + group[0] + '</h3>' + table(group, f'comparison-{index}') + chart(group, f'chart-{index}')
+    sections += '</section>'
     sections += '<section class="panel"><p class="section-kicker">03 · 理解限制</p><h2>看到差异，还要检查比较条件</h2><p>两组客户可能来自不同渠道，也可能在咨询阶段、观察时间或参与方式上存在差异。真实报告应当说明这些条件，再判断结果能支持多强的结论。</p><p class="callout is-uncertain"><strong>需要确认：</strong>样本是否可比、观察时间是否一致。不要把“买单比例较高”直接写成“方案带来了提升”。</p></section>'
     details = '<p>所有方案、人数和比例均为虚构示例；不对应任何真实客户或项目。</p><details><summary>展开：缺失数据与零值的写法</summary><table id="missing-example"><thead><tr><th scope="col">数据状态</th><th scope="col">显示内容</th></tr></thead><tbody><tr><td>尚未提供结果</td><td class="is-insufficient">未提供</td></tr><tr><td>已确认无人买单</td><td class="number">0</td></tr></tbody></table><p class="note">“未提供”表示缺少记录，“0”表示已有记录且数值为零，二者不能互换。</p></details>'
     values = {
         "REPORT_THEME": theme, "REPORT_TITLE": "服务方案与买单情况", "REPORT_TYPE": "四种风格实样 · 虚构示例数据",
-        "DATA_DATE": "2026年9月", "CUTOFF_TIME": "2026年9月30日", "RECORD_COUNT": "2,000名虚构客户",
-        "ONE_SENTENCE_CONCLUSION": CONCLUSION, "KEY_METRICS_TITLE": "方案甲与方案乙的总体对比",
-        "KEY_METRICS_SUMMARY": "买单比例＝买单人数÷客户人数。蓝色与紫色区分方案，不表示好坏。",
-        "KEY_METRIC_HEADERS": key_headers, "KEY_METRIC_ROWS": key_rows,
-        "PRIORITY_FINDINGS_TITLE": "结论的适用范围", "PRIORITY_FINDING_ROWS": "",
+        "REPORT_KIND": "evidence-report",
+        "REPORT_META": "<span>数据日期：2026年9月</span><span>统计截至：2026年9月30日</span><span>数据范围：2,000名虚构客户</span>",
+        "ONE_SENTENCE_CONCLUSION": CONCLUSION,
+        "SUMMARY_TITLE": "先看总体差别与判断条件",
+        "SUMMARY_SCOPE": "核心值与适用条件放在一起，精确人数与分组证据随后展开。",
+        "SUMMARY_CONTENT": summary,
         "REPORT_SECTIONS": sections, "NOTES_TITLE": "数据说明", "DETAIL_SECTIONS": details,
-        "DATA_SOURCES": "虚构数据，仅供风格预览", "GENERATED_DATE": "2026年9月22日", "REPORT_VERSION": "风格实样 v2.0.0",
+        "DATA_SOURCES": "虚构数据，仅供风格预览", "GENERATED_DATE": "2026年9月29日", "REPORT_VERSION": "风格实样 v2.1.0",
     }
     html = re.sub(r"\{\{([A-Z0-9_]+)\}\}", lambda m: values[m[1]], template)
-    html = html.replace('<table><thead>', '<table id="comparison-0"><thead>', 1)
-    html = html.replace('</tbody></table>', '</tbody></table>' + chart(GROUPS[0], 'chart-0'), 1)
-    # This sample has no owners or actions; do not invent them to fill the generic template.
-    html = re.sub(r'<section class="panel" id="priority-findings">.*?</section>', '<section class="panel" id="priority-findings"><h2>这份示例能说明什么</h2><p>可以比较三种人群范围内的表格、图表和重点标记。不能用于判断任何真实方案的效果。</p></section>', html, flags=re.S)
     if controls:
         buttons = ''.join(f'<button type="button" data-style="{key}" aria-pressed="{str(key == theme).lower()}"><strong>{name}</strong><span>{description}</span></button>' for key, (name, description) in STYLES.items())
         toolbar = '<aside class="preview-tools" aria-label="四种风格预览"><p><strong>同一份内容，四种设计</strong> · 点击下方风格查看实际效果</p><div class="preview-options">' + buttons + '</div><p class="note">全部数据均为虚构。此处切换仅用于预览，不记录正式报告的风格选择。</p></aside>'

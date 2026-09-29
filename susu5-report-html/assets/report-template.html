@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="generator" content="susu5-report-html v2.0.0">
+<meta name="generator" content="susu5-report-html v2.1.0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{REPORT_TITLE}}</title>
 <style>
@@ -48,14 +48,14 @@ a {color:var(--blue);text-underline-offset:4px}
 p {margin:10px 0 16px}
 .report-header {padding:38px 0 24px}
 .eyebrow,.section-kicker {margin:0 0 8px;color:var(--blue);font-size:15px;font-weight:700}
-h1 {margin:0;font-size:36px;line-height:1.4;letter-spacing:.02em}
-h2 {margin:0;font-size:25px;line-height:1.5}
+h1 {margin:0;font-size:32px;line-height:1.4;letter-spacing:.02em}
+h2 {margin:0;font-size:23px;line-height:1.5}
 h3 {margin:0 0 12px;font-size:20px;line-height:1.6}
 .meta {display:flex;flex-wrap:wrap;gap:6px 24px;color:var(--muted);font-size:15px;margin:12px 0 0}
-.verdict {padding:16px 20px;margin:22px 0 0;border-left:4px solid var(--blue);background:var(--blue-soft);font-size:20px;font-weight:600}
+.verdict {padding:16px 20px;margin:22px 0 0;border-left:4px solid var(--blue);background:var(--blue-soft);font-size:18px;font-weight:600}
 .nav {display:flex;flex-wrap:wrap;gap:10px 24px;margin:0 0 28px;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);font-size:16px}
 .nav a {text-decoration:none}
-a:focus-visible,button:focus-visible,summary:focus-visible {outline:3px solid var(--blue);outline-offset:4px}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible {outline:3px solid var(--blue);outline-offset:4px}
 main {padding-bottom:24px}
 section {margin:0 0 28px;scroll-margin-top:24px}
 .panel {padding:var(--panel-pad);border:1px solid var(--border);border-radius:var(--radius);background:var(--panel)}
@@ -68,7 +68,23 @@ thead th {background:var(--head-bg);font-size:16px;font-weight:700}
 tbody th {font-weight:500}
 tbody tr:nth-child(even) {background:var(--stripe)}
 .number {text-align:right;font-variant-numeric:tabular-nums}
-.strong-number {font-size:26px;font-weight:700;line-height:1.4}
+.strong-number {font-size:32px;font-weight:700;line-height:1.4}
+.conclusion-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px}
+.conclusion-card {min-width:0;padding:18px 20px;border:1px solid var(--border);border-top:3px solid var(--blue);border-radius:var(--radius);background:var(--panel)}
+.conclusion-card h3 {font-size:18px;margin-bottom:8px}
+.conclusion-card p {margin:6px 0 10px}
+.metric-status {display:block;font-size:15px;color:var(--muted);margin-bottom:6px}
+.formula-box {margin:12px 0;padding:16px 18px;background:var(--stripe);border-left:3px solid var(--blue);font-size:17px;overflow-wrap:anywhere}
+.scenario-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.parameter-panel,.result-panel {min-width:0;padding:20px;border:1px solid var(--border);border-radius:var(--radius);background:var(--stripe)}
+.parameter-panel label {display:block;font-size:16px;font-weight:600;margin:16px 0 8px}
+input[type="range"] {width:100%;accent-color:var(--blue)}
+.model-status {font-size:15px;color:var(--muted)}
+.result-list {margin:0}
+.result-list div {display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-bottom:1px solid var(--border)}
+.result-list dt {font-size:16px}
+.result-list dd {margin:0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+button {font:inherit;color:var(--text);background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;cursor:pointer}
 .metric-primary,.metric-forecast {color:var(--blue);font-weight:700}
 .group-a {color:var(--blue)}
 .group-b {color:var(--purple)}
@@ -102,48 +118,46 @@ body[data-theme="clean-table"] .report-header {border-top:6px solid #203e66}
 body[data-theme="clean-table"] .panel {border:0;border-top:2px solid var(--border);padding:24px 0}
 body[data-theme="clean-table"] thead th {border-bottom:2px solid #879ab0}
 body[data-theme="clean-table"] .chart-card {border:0;border-left:3px solid var(--border);padding:12px 24px}
+body[data-theme="clean-table"] .conclusion-card {border:0;border-left:3px solid var(--blue)}
 body[data-theme="light-glass"] h1 {border-left:6px solid var(--blue);padding-left:18px}
 body[data-theme="light-glass"] .chart-card {background:var(--stripe)}
-body[data-theme="light-glass"] #key-metrics {border-top:4px solid var(--blue)}
+body[data-theme="light-glass"] #summary {border-top:4px solid var(--blue)}
+body[data-theme="light-glass"] .conclusion-card {background:var(--stripe)}
 body[data-theme="editorial-brief"] h1,body[data-theme="editorial-brief"] h2 {font-family:"Noto Serif CJK SC","Source Han Serif SC","Songti SC","SimSun",serif}
-body[data-theme="editorial-brief"] h1 {font-size:38px}
+body[data-theme="editorial-brief"] h1 {font-size:34px}
 body[data-theme="editorial-brief"] .panel {border:0;border-top:1px solid var(--border)}
 body[data-theme="editorial-brief"] .chart-card {border:0;border-top:1px solid var(--border);padding:24px 0}
 body[data-theme="editorial-brief"] th,body[data-theme="editorial-brief"] td {padding-top:16px;padding-bottom:16px}
 body[data-theme="editorial-brief"] .report-header {padding-top:48px}
+body[data-theme="editorial-brief"] .conclusion-grid {grid-template-columns:1fr}
+body[data-theme="editorial-brief"] .conclusion-card {padding:16px 0;border:0;border-bottom:1px solid var(--border)}
 body[data-theme="dark-analytics"] .report-header {border-top:4px solid var(--blue)}
 body[data-theme="dark-analytics"] .verdict {background:transparent;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 body[data-theme="dark-analytics"] .section-kicker {letter-spacing:.08em}
 body[data-theme="dark-analytics"] thead th {border-bottom:2px solid #7b92ae}
 @media (max-width:900px) {
   .shell {width:calc(100% - 48px)}
-  .chart-grid {grid-template-columns:1fr}
+  .chart-grid,.conclusion-grid,.scenario-grid {grid-template-columns:1fr}
   h1 {font-size:30px}
   .panel {padding:20px 0}
   body[data-theme="light-glass"] .panel,body[data-theme="dark-analytics"] .panel {padding:20px}
 }
 </style>
 </head>
-<body data-theme="{{REPORT_THEME}}">
+<body data-theme="{{REPORT_THEME}}" data-report-kind="{{REPORT_KIND}}">
 <div class="shell">
 <header class="report-header">
 <p class="eyebrow">{{REPORT_TYPE}}</p>
 <h1>{{REPORT_TITLE}}</h1>
-<div class="meta"><span>数据日期：{{DATA_DATE}}</span><span>统计截至：{{CUTOFF_TIME}}</span><span>数据范围：{{RECORD_COUNT}}</span></div>
+<div class="meta">{{REPORT_META}}</div>
 <p class="verdict">{{ONE_SENTENCE_CONCLUSION}}</p>
 </header>
-<nav class="nav" aria-label="报告章节"><a href="#summary">结论与核心对比</a><a href="#report-body">分项数据</a><a href="#notes">数据说明</a></nav>
+<nav class="nav" aria-label="报告章节"><a href="#summary">核心结论</a><a href="#report-body">依据与解释</a><a href="#notes">来源与口径</a></nav>
 <main>
-<div id="summary" class="first-screen">
-<section class="panel" id="key-metrics">
-<div class="section-head"><p class="section-kicker">01 · 核心对比</p><h2>{{KEY_METRICS_TITLE}}</h2><p class="section-summary">{{KEY_METRICS_SUMMARY}}</p></div>
-<table><thead><tr>{{KEY_METRIC_HEADERS}}</tr></thead><tbody>{{KEY_METRIC_ROWS}}</tbody></table>
+<section class="panel" id="summary" aria-labelledby="summary-title">
+<div class="section-head"><p class="section-kicker">01 · 判断与条件</p><h2 id="summary-title">{{SUMMARY_TITLE}}</h2><p class="section-summary">{{SUMMARY_SCOPE}}</p></div>
+{{SUMMARY_CONTENT}}
 </section>
-<section class="panel" id="priority-findings">
-<div class="section-head"><h2>{{PRIORITY_FINDINGS_TITLE}}</h2></div>
-<table><thead><tr><th scope="col">事项</th><th scope="col">数据证据</th><th scope="col">解释与限制</th><th scope="col">后续动作</th><th scope="col">负责人</th></tr></thead><tbody>{{PRIORITY_FINDING_ROWS}}</tbody></table>
-</section>
-</div>
 <div id="report-body">{{REPORT_SECTIONS}}</div>
 <section class="panel" id="notes"><div class="section-head"><h2>{{NOTES_TITLE}}</h2></div>{{DETAIL_SECTIONS}}</section>
 </main>

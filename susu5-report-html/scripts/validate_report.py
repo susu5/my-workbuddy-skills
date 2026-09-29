@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 from html.parser import HTMLParser
@@ -11,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 ALLOWED_THEMES = {"clean-table", "light-glass", "editorial-brief", "dark-analytics"}
+ALLOWED_REPORT_KINDS = {"decision-brief", "evidence-report", "scenario-model"}
 REQUIRED_SEMANTIC_CLASSES = {
     "metric-primary", "metric-forecast", "is-problem", "is-opportunity",
     "is-uncertain", "delta-negative", "delta-positive", "is-neutral", "is-insufficient",
@@ -54,9 +56,20 @@ class ReportParser(HTMLParser):
         self.table: dict[str, int] | None = None
         self.row_cells = 0
         self.in_thead = False
+        self.tag_counts: dict[str, int] = {}
+        self.inputs: list[dict[str, str | None]] = []
+        self.label_text: dict[str, list[str]] = {}
+        self.active_labels: list[str] = []
 
     def handle_starttag(self, tag, attrs):
         attr = dict(attrs)
+        self.tag_counts[tag] = self.tag_counts.get(tag, 0) + 1
+        if tag == "input" and (attr.get("type") or "text").lower() in {"range", "number"}:
+            self.inputs.append(attr)
+        if tag == "label":
+            target = attr.get("for") or ""
+            self.active_labels.append(target)
+            self.label_text.setdefault(target, [])
         element_id = attr.get("id")
         if element_id:
             if element_id in self.ids:
@@ -94,6 +107,8 @@ class ReportParser(HTMLParser):
             self.table["max_columns"] = max(self.table["max_columns"], self.row_cells)
 
     def handle_endtag(self, tag):
+        if tag == "label" and self.active_labels:
+            self.active_labels.pop()
         for index in range(len(self.stack) - 1, -1, -1):
             if self.stack[index][0] == tag:
                 del self.stack[index:]
@@ -108,6 +123,8 @@ class ReportParser(HTMLParser):
             return
         text = re.sub(r"\s+", " ", data).strip()
         if text:
+            for target in self.active_labels:
+                self.label_text[target].append(text)
             self.visible_text.append(text)
             for _, element_id in self.stack:
                 if element_id:
@@ -133,6 +150,65 @@ def validate_selection(selection, selected_theme):
     return errors
 
 
+def validate_inputs(parsed, report_kind):
+    """Validate declared names/defaults/bounds; never execute a business model."""
+    errors = []
+    for index, attrs in enumerate(parsed.inputs, 1):
+        name = attrs.get("id") or f"第 {index} 个输入"
+        labelled_ids = (attrs.get("aria-labelledby") or "").split()
+        labelled_by_text = bool(labelled_ids) and all(
+            item in parsed.ids and bool(parsed.id_text.get(item)) for item in labelled_ids
+        )
+        label_text = " ".join(parsed.label_text.get(attrs.get("id"), []))
+        if not (label_text.strip() or (attrs.get("aria-label") or "").strip() or labelled_by_text):
+            errors.append(f"输入 {name} 缺少关联 label 或可访问名称。")
+        if report_kind == "scenario-model" and any(attrs.get(key) in (None, "") for key in ("min", "max", "value")):
+            errors.append(f"情景输入 {name} 必须明确 min、max 和默认 value。")
+        is_range = (attrs.get("type") or "").lower() == "range"
+        values = {}
+        defaults = {"min": "0", "max": "100"} if is_range else {}
+        for key in ("min", "max", "value", "step"):
+            raw = attrs.get(key, defaults.get(key))
+            if raw is None or (key == "step" and raw == "any"):
+                continue
+            try:
+                number = float(raw)
+                if not math.isfinite(number):
+                    raise ValueError("not finite")
+                values[key] = number
+            except (TypeError, ValueError):
+                errors.append(f"输入 {name} 的 {key} 必须是有限数值。")
+        lo, hi, value = (values.get(key) for key in ("min", "max", "value"))
+        if lo is not None and hi is not None and lo >= hi:
+            errors.append(f"输入 {name} 的 min 必须小于 max。")
+        if value is not None and ((lo is not None and value < lo) or (hi is not None and value > hi)):
+            errors.append(f"输入 {name} 的默认值超出声明范围。")
+        step = values.get("step", 1.0)
+        if step <= 0:
+            errors.append(f"输入 {name} 的 step 必须大于零或为 any。")
+        elif value is not None and attrs.get("step") != "any":
+            # Native number inputs use the value attribute as the step base when min is absent.
+            base = lo if lo is not None else value
+            ticks = (value - base) / step
+            if not math.isfinite(ticks) or not math.isclose(ticks, round(ticks), abs_tol=1e-7):
+                errors.append(f"输入 {name} 的默认值与步长不匹配。")
+        kind = attrs.get("data-value-kind")
+        if kind == "probability":
+            scale = attrs.get("data-value-scale")
+            if scale not in {"percent", "fraction"}:
+                errors.append(f"概率输入 {name} 必须声明 percent 或 fraction 比例尺度。")
+            else:
+                upper = 100 if scale == "percent" else 1
+                if lo is None or hi is None or lo < 0 or hi > upper or (value is not None and not 0 <= value <= upper):
+                    errors.append(f"概率输入 {name} 的范围必须在 0 到 {upper} 之间。")
+        elif kind == "count":
+            if lo is None or lo < 0 or any(not item.is_integer() for item in (lo, hi, value, step) if item is not None):
+                errors.append(f"人数输入 {name} 必须使用非负整数边界、默认值及整数步长。")
+            if attrs.get("step") == "any":
+                errors.append(f"人数输入 {name} 不得使用任意小数步长。")
+    return errors
+
+
 def validate_against_package(html, visible_text, package, parsed=None):
     errors = []
     compact = normalized_text(visible_text)
@@ -144,6 +220,7 @@ def validate_against_package(html, visible_text, package, parsed=None):
     for metric in package.get("key_metrics", []):
         if isinstance(metric, dict):
             fields.extend((("关键指标名称", metric.get("label")), ("关键指标值", metric.get("display_value"))))
+            fields.extend((("指标状态", metric.get("status_label")), ("指标成立条件", metric.get("condition"))))
     for finding in package.get("priority_findings", []):
         if not isinstance(finding, dict):
             continue
@@ -200,6 +277,10 @@ def validate_html(path, template_mode, content_package, expected_theme,
         errors.append("HTML 包含内部滚动设置，请拆分表格并移除滑动块。")
     theme_match = re.search(r'<body\b[^>]*\bdata-theme=["\']([^"\']+)["\']', html, re.I)
     selected_theme = theme_match.group(1) if theme_match else None
+    kind_match = re.search(r'<body\b[^>]*\bdata-report-kind=["\']([^"\']+)["\']', html, re.I)
+    report_kind = kind_match.group(1) if kind_match else "evidence-report"
+    if not (template_mode and report_kind == "{{REPORT_KIND}}") and report_kind not in ALLOWED_REPORT_KINDS:
+        errors.append(f"不支持的内容结构：{report_kind}")
     if not (template_mode and selected_theme == "{{REPORT_THEME}}"):
         if selected_theme not in ALLOWED_THEMES:
             errors.append(f"不支持或缺少报告风格：{selected_theme}")
@@ -226,11 +307,19 @@ def validate_html(path, template_mode, content_package, expected_theme,
     abbreviations = sorted(set(ABBREVIATION_PATTERN.findall(visible_text)))
     if abbreviations:
         warnings.append("请确认这些简称已有全称或解释：" + "、".join(abbreviations))
-    missing_ids = {"summary", "key-metrics", "priority-findings", "report-body", "notes"} - parsed.ids
+    missing_ids = {"summary", "report-body", "notes"} - parsed.ids
     if missing_ids:
         errors.append("缺少必要页面区域：" + "、".join(sorted(missing_ids)))
-    if not parsed.tables:
-        errors.append("HTML 没有表格。")
+    if parsed.tag_counts.get("h1", 0) != 1:
+        errors.append("报告必须有且仅有一个 h1 主标题。")
+    for tag in ("header", "main", "footer"):
+        if not parsed.tag_counts.get(tag):
+            errors.append(f"报告缺少 {tag} 文档区域。")
+    if not parsed.tag_counts.get("h2"):
+        errors.append("报告章节应使用 h2 语义标题。")
+    errors.extend(validate_inputs(parsed, report_kind))
+    if parsed.inputs:
+        warnings.append("包含参数输入；尚需独立核对模型、边界情景、动态同步、重置及键盘操作。")
     for index, table in enumerate(parsed.tables, 1):
         if table["max_columns"] > 7:
             errors.append(f"第 {index} 张表超过七列，请拆表。")
