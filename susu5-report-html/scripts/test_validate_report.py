@@ -5,8 +5,9 @@ import re
 import tempfile
 import unittest
 from pathlib import Path
-from build_style_preview import render_demo, sample_package, STYLES, ROOT
-from validate_report import validate_html
+from build_style_preview import render_demo, sample_package, STYLES, ROOT, demo_values, render_gallery
+from render_report import render_html, KINDS
+from validate_report import validate_html, validate_selection, ReportParser
 
 
 class ReportChecks(unittest.TestCase):
@@ -46,10 +47,41 @@ class ReportChecks(unittest.TestCase):
         self.save(render_demo("clean-table"))
         self.assertTrue(self.check())
 
-    def test_not_all_styles_offered_blocks_delivery(self):
+    def test_one_candidate_is_not_a_real_choice(self):
         self.record["offered"] = ["clean-table"]
         self.save()
         self.assertTrue(self.check())
+
+    def test_three_relevant_candidates_are_sufficient(self):
+        self.record.update(recommended='swiss-impact', selected='consulting-green',
+                           offered=['swiss-impact', 'consulting-green', 'engineering-blueprint'])
+        self.save()
+        self.assertEqual(self.check(), [])
+
+    def test_original_four_style_record_is_compatible(self):
+        self.record['offered'] = ['clean-table', 'light-glass', 'editorial-brief', 'dark-analytics']
+        self.save()
+        self.assertEqual(self.check(), [])
+
+    def test_explicit_or_delegated_choice_needs_no_artificial_options(self):
+        for basis in ('explicit_style', 'delegated'):
+            self.record.update(recommended='annual-noir', selected='annual-noir',
+                               offered=['annual-noir'], selection_basis=basis)
+            self.save()
+            self.assertEqual(self.check(), [])
+
+    def test_invalid_duplicate_and_unoffered_choices_rejected(self):
+        for offered in ([], ['clean-table'] * 3, ['clean-table', 'light-glass', 'unknown'],
+                        ['swiss-impact', 'consulting-green', 'engineering-blueprint'], [None]):
+            with self.subTest(offered=offered):
+                self.record['offered'] = offered
+                self.save()
+                self.assertTrue(self.check())
+
+    def test_malformed_selection_reports_errors_without_crashing(self):
+        for value in ([], {}, None):
+            record = dict(self.record, recommended=value)
+            self.assertTrue(validate_selection(record, 'clean-table'))
 
     def test_timeout_cannot_stand_in_for_choice(self):
         self.record["selection_basis"] = "timeout"
@@ -90,6 +122,76 @@ class ReportChecks(unittest.TestCase):
 
     def test_template_is_valid(self):
         self.assertEqual(validate_html(ROOT / "assets/report-template.html", True, None, None)[0], [])
+
+    def test_all_forty_composed_scaffolds_are_valid_templates(self):
+        for theme in STYLES:
+            for kind in KINDS:
+                with self.subTest(theme=theme, kind=kind):
+                    self.html.write_text(render_html(theme, kind, scaffold=True), encoding='utf-8')
+                    self.assertEqual(validate_html(self.html, True, None, theme)[0], [])
+
+    def test_all_kinds_accept_complete_content_without_unresolved_fields(self):
+        common = {key: value for key, value in demo_values().items()
+                  if key not in {'EVIDENCE_CONTENT', 'EVIDENCE_TITLE',
+                                 'INTERPRETATION_CONTENT', 'INTERPRETATION_TITLE'}}
+        for kind, spec in KINDS.items():
+            with self.subTest(kind=kind):
+                values = common | {slot: '<p>明确标注的虚构组件；材料未提供时须保留限制。</p>'
+                                   for slot in spec['slots'] if slot != 'ACTION_CONTENT'}
+                document = render_html('engineering-blueprint', kind, values)
+                self.html.write_text(document, encoding='utf-8')
+                self.assertNotIn('{{', document)
+                self.assertEqual(validate_html(self.html, False, None, 'engineering-blueprint')[0], [])
+
+    def test_process_bone_has_ordered_flow_rules_and_exception_regions(self):
+        document = render_html('engineering-blueprint', 'process-playbook', scaffold=True)
+        markers = ['id="summary"', 'id="process-flow"', 'id="handoff-rules"', 'id="exceptions"', 'id="rollout"', 'id="notes"']
+        self.assertEqual(sorted(markers, key=document.index), markers)
+
+    def test_no_action_is_invented_and_missing_evidence_is_rejected(self):
+        document = render_demo()
+        self.assertNotIn('id="actions"', document)
+        values = demo_values()
+        values.pop('EVIDENCE_CONTENT')
+        with self.assertRaisesRegex(ValueError, 'EVIDENCE_CONTENT'):
+            render_html('clean-table', 'evidence-report', values)
+
+    def test_unused_nonempty_content_cannot_silently_disappear(self):
+        values = demo_values()
+        values['FLOW_CONTENT'] = '<p>不可丢失的步骤</p>'
+        with self.assertRaisesRegex(ValueError, 'FLOW_CONTENT'):
+            render_html('clean-table', 'evidence-report', values)
+
+    def test_plain_text_is_escaped_and_display_values_stay_strings(self):
+        values = demo_values()
+        values['REPORT_TITLE'] = '<script>标题</script> & 8.00%'
+        document = render_html('swiss-impact', 'evidence-report', values)
+        self.assertIn('&lt;script&gt;标题&lt;/script&gt; &amp; 8.00%', document)
+        values['ONE_SENTENCE_CONCLUSION'] = 8.0
+        with self.assertRaisesRegex(ValueError, 'display_value'):
+            render_html('swiss-impact', 'evidence-report', values)
+
+    def test_only_selected_theme_definition_is_required(self):
+        document = render_demo()
+        document = re.sub(r'body\[data-theme="(?!clean-table)[^"]+"\][^{}]*\{[^{}]*\}', '', document)
+        self.save(document)
+        self.assertEqual(self.check(), [])
+
+    def test_selected_theme_without_definition_rejected(self):
+        self.save(render_demo().replace('body[data-theme="clean-table"]', 'body[data-theme="unused"]'))
+        self.assertTrue(self.check())
+
+    def test_gallery_uses_complete_real_renderer_documents(self):
+        gallery = render_gallery()
+        encoded = re.search(r'<script id="demo-documents" type="application/json">(.*?)</script>', gallery, re.S)[1]
+        docs = json.loads(encoded)
+        self.assertEqual(set(docs), set(STYLES))
+        for theme, document in docs.items():
+            self.assertEqual(document, render_demo(theme))
+            parsed = ReportParser()
+            parsed.feed(document)
+            self.assertFalse(parsed.resource_refs)
+        self.assertNotIn('fetch(', gallery)
 
     def add_input(self, markup, label='<label for="parameter">参数含义</label>', scenario=False):
         html = render_demo()

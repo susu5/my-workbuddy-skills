@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="generator" content="susu5-report-html v2.1.0">
+<meta name="generator" content="susu5-report-html v3.0.0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{REPORT_TITLE}}</title>
 <style>
@@ -142,6 +142,144 @@ body[data-theme="dark-analytics"] thead th {border-bottom:2px solid #7b92ae}
   .panel {padding:20px 0}
   body[data-theme="light-glass"] .panel,body[data-theme="dark-analytics"] .panel {padding:20px}
 }
+
+/* 六个独立构图方向；布局片段位于 assets/layouts。 */
+body[data-theme="swiss-impact"] {--page-bg:#f5f4ef;--panel:#f5f4ef;--text:#161616;--muted:#55534e;--border:#a5a39c;--head-bg:#e6e4dd;--stripe:#eeece6;--blue:#b32426;--purple:#304f87;--blue-soft:#f6e3df;--radius:0px}
+body[data-theme="consulting-green"] {--page-bg:#f5f1e6;--panel:#f5f1e6;--text:#203a31;--muted:#536358;--border:#b9c0af;--head-bg:#e3e8db;--stripe:#efeee2;--blue:#205a45;--purple:#715574;--blue-soft:#e4ecdf;--radius:0px}
+body[data-theme="engineering-blueprint"] {--page-bg:#edf4fc;--panel:#f8fbff;--text:#173d6b;--muted:#4e6580;--border:#9eb5cf;--head-bg:#dfebf8;--stripe:#eaf2fb;--blue:#164f98;--purple:#6d4b94;--blue-soft:#dfeaf9;--radius:0px}
+body[data-theme="annual-noir"] {--page-bg:#161817;--panel:#161817;--text:#f4f0e7;--muted:#c0b9a8;--border:#736b59;--head-bg:#303128;--stripe:#22251f;--blue:#e9c77b;--purple:#c6b2e6;--blue-soft:#323025;--red:#ffb6bc;--red-soft:#442b2c;--green:#aadbb6;--green-soft:#263c2a;--yellow:#f1d18d;--yellow-soft:#383121;--insufficient:#c0b9a8;--radius:0px}
+body[data-theme="data-pop"] {--page-bg:#f3f1e7;--panel:#fffdf5;--text:#171917;--muted:#4d5149;--border:#171917;--head-bg:#e7ebb8;--stripe:#f0f2dc;--blue:#203db6;--purple:#80387d;--blue-soft:#e5eaff;--radius:0px}
+body[data-theme="oriental-ink"] {--page-bg:#f8f5ed;--panel:#f8f5ed;--text:#292d29;--muted:#5e635b;--border:#c1c4b7;--head-bg:#eaece1;--stripe:#f0f1e7;--blue:#a3302e;--purple:#425c71;--blue-soft:#f4e5dc;--radius:0px}
+.hero-visual,.hero-title,.ink-copy{min-width:0}
+.hero-visual:empty,.cover-evidence:empty{display:none}
+.hero-metric{margin:0}
+.hero-metric dt{font-size:17px;font-weight:600}
+.hero-metric dd{margin:0;font-size:clamp(48px,7vw,88px);line-height:1.15;font-weight:750;font-variant-numeric:tabular-nums}
+.hero-metric .note{font-weight:400}
+.hero-visual .chart-card,.cover-evidence .chart-card{border:0;padding:0;background:transparent}
+.hero-comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin:16px 0}
+.hero-comparison>div{min-width:0}
+.flow-track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));list-style:none;padding:0;gap:16px;counter-reset:step}
+.flow-track li{min-width:0;border:1px solid var(--border);padding:18px;counter-increment:step}
+.flow-track li:before{content:counter(step,decimal-leading-zero);display:block;font-size:22px;color:var(--blue);font-weight:700}
+.flow-track strong,.flow-track span{display:block}
+.flow-track span{font-size:16px;color:var(--muted)}
+.evidence-pair{display:grid;grid-template-columns:1.15fr 1fr;gap:30px;align-items:start;margin:24px 0 36px}
+.evidence-pair>div,.evidence-pair>figure{min-width:0}
+.evidence-pair table{margin-top:0}
+.summary-list{counter-reset:point}
+.summary-list .conclusion-card{counter-increment:point}
+body[data-theme="swiss-impact"] .report-header{padding:24px 0 34px;border-top:12px solid var(--text)}
+body[data-theme="swiss-impact"] .eyebrow{text-transform:uppercase;letter-spacing:.1em;border-bottom:2px solid var(--text);padding:0 0 14px}
+.swiss-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:40px;margin-top:32px;align-items:center}
+body[data-theme="swiss-impact"] h1{font-size:clamp(42px,5.5vw,72px);font-weight:850;line-height:1.15;letter-spacing:-.035em;max-width:12ch}
+body[data-theme="swiss-impact"] .hero-metric dd{font-size:clamp(60px,9vw,112px);letter-spacing:-.06em;color:var(--blue)}
+body[data-theme="swiss-impact"] .verdict{border:0;border-top:3px solid var(--text);padding:20px 0 0;background:transparent;margin-top:30px;font-size:21px}
+body[data-theme="swiss-impact"] .panel{padding:30px 0;border:0;border-top:3px solid var(--text)}
+body[data-theme="swiss-impact"] .conclusion-grid{display:block;counter-reset:point}
+body[data-theme="swiss-impact"] .conclusion-card{display:grid;grid-template-columns:56px 1fr;column-gap:24px;border:0;border-bottom:1px solid var(--border);padding:20px 0;counter-increment:point}
+body[data-theme="swiss-impact"] .conclusion-card:before{content:counter(point,decimal-leading-zero);grid-row:span 5;color:var(--blue);font-size:32px;font-weight:800}
+body[data-theme="swiss-impact"] .conclusion-card>*{grid-column:2}
+body[data-theme="swiss-impact"] thead th{background:var(--text);color:var(--page-bg)}
+body[data-theme="swiss-impact"] .chart-card{border:0;border-left:3px solid var(--text);border-radius:0}
+body[data-theme="consulting-green"] h1,body[data-theme="consulting-green"] h2{font-family:"Songti SC","SimSun",serif}
+.hero-consulting{background:#183e32;color:#faf5e7;padding:38px 44px 32px;margin-top:24px;min-height:500px;display:flex;flex-direction:column}
+.cover-masthead{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #668276;padding-bottom:22px}
+.cover-mark{width:36px;height:36px;border:1px solid #dfcf9c;transform:rotate(45deg);flex-shrink:0}
+.hero-consulting h1{font-size:clamp(38px,4.4vw,58px);line-height:1.4;max-width:16ch;margin:36px 0 8px}
+.hero-consulting .eyebrow,.hero-consulting .meta,.hero-consulting .note{color:#d4dfd3}
+.hero-consulting .verdict{color:#faf5e7;background:transparent;padding:0;border:0;font-weight:400;max-width:65ch}
+.hero-consulting .cover-evidence{margin-top:auto;padding-top:30px}
+.hero-consulting .hero-metric dd{font-size:56px;color:#e7d79f}
+.hero-consulting .meta{border-top:1px solid #668276;padding-top:20px;margin-top:24px}
+body[data-theme="consulting-green"] .panel{border:0;border-top:1px solid var(--border);padding:36px 0}
+body[data-theme="consulting-green"] .conclusion-grid{grid-template-columns:1fr;gap:0}
+body[data-theme="consulting-green"] .conclusion-card{border:0;border-bottom:1px solid var(--border);padding:22px 0 22px 24px;border-left:3px solid var(--blue)}
+body[data-theme="consulting-green"] .strong-number{font-size:28px}
+body[data-theme="consulting-green"] .section-head{padding-left:20px;border-left:4px solid var(--blue)}
+body[data-theme="consulting-green"] .chart-card{border:0;background:#e9eddf}
+body[data-theme="engineering-blueprint"] .report-header{padding:32px;border:1px solid var(--blue);margin:24px 0;background-image:linear-gradient(#32629b14 1px,transparent 1px),linear-gradient(90deg,#32629b14 1px,transparent 1px);background-size:24px 24px}
+.blueprint-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:30px;align-items:center}
+body[data-theme="engineering-blueprint"] h1{font-size:clamp(36px,3.7vw,48px);line-height:1.3}
+body[data-theme="engineering-blueprint"] .verdict{border:1px solid var(--blue);background:var(--panel);margin-top:30px}
+body[data-theme="engineering-blueprint"] #report-body{border-left:2px solid var(--blue);padding-left:28px}
+body[data-theme="engineering-blueprint"] #report-body>.panel{position:relative;border:1px solid var(--border)}
+body[data-theme="engineering-blueprint"] #report-body>.panel:before{content:"";position:absolute;left:-36px;top:32px;width:12px;height:12px;border:2px solid var(--blue);background:var(--page-bg)}
+body[data-theme="engineering-blueprint"] .section-kicker{letter-spacing:.08em}
+body[data-theme="engineering-blueprint"] .conclusion-card{border:1px dashed var(--blue);background:transparent}
+.blueprint-flow{padding:0;list-style:none;margin:0;display:grid;gap:12px}
+.blueprint-flow li{border:1px solid var(--blue);background:var(--panel);padding:14px 16px}
+.blueprint-flow strong{display:block;font-size:24px}
+body[data-theme="annual-noir"] .report-header{padding:30px 0 48px;border-bottom:1px solid var(--blue)}
+.noir-stage{display:grid;grid-template-columns:1.15fr 1fr;gap:44px;align-items:end;margin:52px 0 42px}
+body[data-theme="annual-noir"] h1{font-family:"Songti SC","SimSun",serif;font-size:clamp(36px,4vw,54px);line-height:1.35;font-weight:500}
+body[data-theme="annual-noir"] .hero-metric dd{font-size:clamp(72px,11vw,136px);font-weight:400;letter-spacing:-.04em;color:var(--blue)}
+body[data-theme="annual-noir"] .verdict{padding:22px 0 0;background:transparent;border:0;border-top:1px solid var(--border);font-weight:400;font-size:21px}
+body[data-theme="annual-noir"] .panel{border:0;border-bottom:1px solid var(--border);padding:40px 0}
+body[data-theme="annual-noir"] .conclusion-card{border:0;border-left:1px solid var(--blue);padding:0 26px}
+body[data-theme="annual-noir"] .chart-card{border:0;border-top:1px solid var(--border);padding:24px 0}
+body[data-theme="annual-noir"] thead th{background:transparent;border-top:1px solid var(--blue);border-bottom:1px solid var(--blue);color:var(--blue)}
+body[data-theme="annual-noir"] .evidence-pair{grid-template-columns:1fr}
+body[data-theme="annual-noir"] .evidence-pair .chart-card{max-width:900px}
+body[data-theme="data-pop"] .report-header{padding:0;margin-top:24px;border:2px solid var(--text)}
+body[data-theme="data-pop"] .eyebrow{background:var(--text);color:var(--page-bg);padding:14px 24px;margin:0}
+.pop-grid{display:grid;grid-template-columns:1.4fr 1fr}
+.hero-pop .hero-title{background:#203db6;color:#fff;padding:34px}
+.hero-pop h1{font-size:clamp(40px,5vw,66px);font-weight:850;line-height:1.2}
+.hero-pop .hero-visual{background:#dfef69;padding:34px;color:#171917;border-left:2px solid var(--text)}
+.hero-pop .hero-visual .note{color:#424826}
+.hero-pop .hero-metric dd{color:#171917;font-size:clamp(60px,7vw,88px)}
+.hero-pop>.meta{padding:16px 24px;margin:0;border-top:2px solid var(--text)}
+.hero-pop .verdict{padding:20px 24px;border:0;border-top:2px solid var(--text);margin:0;background:#fffdf5}
+body[data-theme="data-pop"] .panel{padding:28px;border:2px solid var(--text)}
+body[data-theme="data-pop"] .conclusion-grid{gap:0;border:2px solid var(--text);background:#dfef69;grid-template-columns:repeat(3,minmax(0,1fr))}
+body[data-theme="data-pop"] .conclusion-card{background:transparent;border:0;border-right:2px solid var(--text);padding:22px}
+body[data-theme="data-pop"] .conclusion-card:last-child{border-right:0}
+body[data-theme="data-pop"] .chart-card{border:2px solid var(--text);background:#e7ecff}
+body[data-theme="data-pop"] thead th{background:var(--text);color:#fffdf5}
+body[data-theme="data-pop"] #summary{padding:0;border:0}
+body[data-theme="data-pop"] #summary>.section-head{margin:0;padding:20px 0}
+body[data-theme="oriental-ink"] .shell{max-width:1100px}
+.hero-ink{display:grid;grid-template-columns:auto 1fr;gap:56px;padding:64px 0 48px;border-bottom:1px solid var(--border)}
+.ink-title-strip{writing-mode:vertical-rl;margin:0;border:1px solid var(--blue);color:var(--blue);padding:18px 10px;font-family:"KaiTi","STKaiti","SimSun",serif;font-size:22px;letter-spacing:.25em;align-self:start}
+.hero-ink h1{font-family:"KaiTi","STKaiti","SimSun",serif;font-size:clamp(40px,4.8vw,60px);line-height:1.45;font-weight:500;max-width:16ch}
+.hero-ink .verdict{background:transparent;border:0;padding:16px 0;max-width:60ch;font-weight:400;font-size:21px}
+.hero-ink .hero-metric dd{font-size:48px;font-weight:500;color:var(--blue)}
+body[data-theme="oriental-ink"] h2{font-family:"Songti SC","SimSun",serif;font-size:28px;font-weight:500}
+body[data-theme="oriental-ink"] .panel{border:0;border-bottom:1px solid var(--border);padding:42px 0}
+body[data-theme="oriental-ink"] .conclusion-grid{display:block}
+body[data-theme="oriental-ink"] .conclusion-card{border:0;border-bottom:1px solid var(--border);padding:24px 0}
+body[data-theme="oriental-ink"] .strong-number{font-size:26px}
+body[data-theme="oriental-ink"] .evidence-pair{grid-template-columns:1fr;gap:16px;margin-bottom:44px}
+body[data-theme="oriental-ink"] .chart-card{border:0;border-left:1px solid var(--blue);padding:12px 24px}
+body[data-theme="oriental-ink"] th,body[data-theme="oriental-ink"] td{padding-top:18px;padding-bottom:18px}
+body[data-theme="oriental-ink"] thead th{background:transparent;border-bottom:2px solid var(--border)}
+.hero-noir:has(.hero-visual:empty) .noir-stage,.hero-swiss:has(.hero-visual:empty) .swiss-grid,.hero-blueprint:has(.hero-visual:empty) .blueprint-grid,.hero-pop:has(.hero-visual:empty) .pop-grid{grid-template-columns:1fr}
+@media(max-width:1000px){.evidence-pair{grid-template-columns:1fr}.swiss-grid,.blueprint-grid,.noir-stage{gap:24px}.hero-consulting{min-height:0}body[data-theme="data-pop"] .conclusion-grid{grid-template-columns:1fr}body[data-theme="data-pop"] .conclusion-card{border-right:0;border-bottom:2px solid var(--text)}body[data-theme="data-pop"] .conclusion-card:last-child{border-bottom:0}}
+@media(max-width:650px){
+ .shell{width:calc(100% - 32px)}
+ h1{font-size:30px;overflow-wrap:anywhere}h2{font-size:23px}
+ .swiss-grid,.blueprint-grid,.noir-stage,.pop-grid,.hero-comparison{grid-template-columns:1fr}
+ .hero-comparison{gap:12px}.noir-stage{margin:26px 0}.hero-ink{grid-template-columns:1fr;gap:24px;padding-top:30px}
+ .ink-title-strip{writing-mode:horizontal-tb;font-size:17px;justify-self:start;letter-spacing:.1em;padding:8px 12px}
+ .hero-consulting{padding:24px}.hero-consulting h1{margin-top:28px}.hero-consulting .hero-metric dd{font-size:48px}
+ body[data-theme="engineering-blueprint"] .report-header{padding:18px}
+ body[data-theme="engineering-blueprint"] #report-body{padding-left:16px}
+ body[data-theme="engineering-blueprint"] #report-body>.panel:before{left:-24px}
+ body[data-theme="data-pop"] .panel{padding:18px}
+ .hero-pop .hero-title,.hero-pop .hero-visual{padding:24px}
+ .hero-pop .hero-visual{border-left:0;border-top:2px solid var(--text)}
+ .hero-pop>.meta,.hero-pop .verdict{padding:18px}
+ body[data-theme="swiss-impact"] .conclusion-card{grid-template-columns:32px 1fr;column-gap:14px}
+ body[data-theme="swiss-impact"] .conclusion-card:before{font-size:24px}
+ .flow-track{grid-template-columns:1fr}
+ th,td{padding:10px 7px;overflow-wrap:anywhere}table{font-size:16px}thead th{font-size:15px}
+ .panel,.chart-card,.conclusion-card{padding:18px 14px}
+ body[data-theme="light-glass"] .panel,body[data-theme="dark-analytics"] .panel{padding:18px 14px}
+ .chart-card{padding:16px}.nav{gap:12px 20px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important}}
+
 </style>
 </head>
 <body data-theme="{{REPORT_THEME}}" data-report-kind="{{REPORT_KIND}}">

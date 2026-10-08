@@ -1,6 +1,6 @@
 interface:
-  display_name: "SUSU5 报告HTML v2.1.0"
-  short_description: "先呈现判断、证据与条件，按内容组织简报、分析或测算，并提供四种风格选择"
-  default_prompt: "使用 $susu5-report-html 制作清晰准确的离线HTML报告。先根据当前内容推荐一种风格，展示清晰商务、现代数据、温暖编辑、深色研判全部四种供我选择，再制作图表清楚、重点明确的报告。"
+  display_name: "SUSU5 报告HTML v3.0.0"
+  short_description: "按阅读任务组织离线报告，提供六种构图鲜明的大胆风格，兼容原四种基础风格"
+  default_prompt: "使用 $susu5-report-html 根据当前内容推荐阅读骨架与视觉风格，展示构图差异明显的候选；已选定或授权代选时直接制作内容准确、离线可读的HTML报告。"
 policy:
   allow_implicit_invocation: true

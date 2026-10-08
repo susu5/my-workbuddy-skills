@@ -11,8 +11,10 @@ from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
-ALLOWED_THEMES = {"clean-table", "light-glass", "editorial-brief", "dark-analytics"}
-ALLOWED_REPORT_KINDS = {"decision-brief", "evidence-report", "scenario-model"}
+from render_report import STYLES, KINDS
+
+ALLOWED_THEMES = set(STYLES)
+ALLOWED_REPORT_KINDS = set(KINDS)
 REQUIRED_SEMANTIC_CLASSES = {
     "metric-primary", "metric-forecast", "is-problem", "is-opportunity",
     "is-uncertain", "delta-negative", "delta-positive", "is-neutral", "is-insufficient",
@@ -138,8 +140,14 @@ def validate_selection(selection, selected_theme):
         if not isinstance(value, str) or value not in ALLOWED_THEMES:
             errors.append(f"风格记录缺少有效的 {key}。")
     offered = selection.get("offered")
-    if not isinstance(offered, list) or len(offered) != 4 or any(not isinstance(item, str) for item in offered) or set(offered) != ALLOWED_THEMES:
-        errors.append("风格记录必须包含全部四种选项，且不得重复。")
+    valid_offered = (isinstance(offered, list) and bool(offered)
+                     and all(isinstance(item, str) and item in ALLOWED_THEMES for item in offered))
+    if not valid_offered or len(set(offered)) != len(offered):
+        errors.append("风格候选必须是有效、非空且不重复的选项。")
+    elif any(selection.get(key) not in offered for key in ('recommended', 'selected')):
+        errors.append("候选必须包含本次推荐和最终选择。")
+    elif selection.get('selection_basis') == 'user_choice' and len(offered) < 3:
+        errors.append("请至少展示三个不同候选后再记录用户选择。")
     if selection.get("selection_basis") not in ("user_choice", "explicit_style", "delegated"):
         errors.append("风格记录没有有效选择依据；默认值、超时或未回复不算选择。")
     for key in ("reason", "user_response"):
@@ -286,9 +294,11 @@ def validate_html(path, template_mode, content_package, expected_theme,
             errors.append(f"不支持或缺少报告风格：{selected_theme}")
         if expected_theme and selected_theme != expected_theme:
             errors.append(f"HTML 风格与 --theme {expected_theme} 不一致。")
-    for theme in ALLOWED_THEMES:
-        if not re.search(r'body\[data-theme=["\']' + re.escape(theme) + r'["\']\]', html):
-            errors.append(f"HTML 缺少 {theme} 风格定义。")
+    # A delivered report needs only its selected style. Legacy four-theme reports
+    # remain valid; unrelated palettes are not mandatory payload.
+    if selected_theme in ALLOWED_THEMES and not re.search(
+            r'body\[data-theme=["\']' + re.escape(selected_theme) + r'["\']\]', html):
+        errors.append(f"HTML 缺少 {selected_theme} 风格定义。")
     parsed = ReportParser()
     parsed.feed(html)
     visible_text = " ".join(parsed.visible_text)

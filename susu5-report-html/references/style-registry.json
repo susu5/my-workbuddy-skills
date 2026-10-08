@@ -1,0 +1,21 @@
+{
+  "version": "3.0.0",
+  "styles": [
+    {"id":"swiss-impact","name":"瑞士构成","family":"bold","layout":"swiss","description":"黑白红、超大标题、不对称网格、粗线与数据大字","best_for":["decision-brief","evidence-report"],"signature":"标题与证据并置；摘要使用连续编号；正文以粗线和网格分区"},
+    {"id":"consulting-green","name":"咨询绿皮书","family":"bold","layout":"consulting","description":"深绿封面、奶油内页、衬线标题、咨询报告章法","best_for":["evidence-report","decision-brief"],"signature":"独立深色封面；摘要为纵向论点；正文使用章节眉与精确证据表"},
+    {"id":"engineering-blueprint","name":"工程蓝图","family":"bold","layout":"blueprint","description":"蓝色网格、节点关系、流程编号、技术规格式分区","best_for":["process-playbook","scenario-model"],"signature":"图解与标题双区；正文使用步骤轨道、交接与异常规则"},
+    {"id":"annual-noir","name":"黑金年报","family":"bold","layout":"noir","description":"近黑底、暖金大数字、细线、大留白、宽幅结果章","best_for":["decision-brief","evidence-report"],"signature":"单个核心结果占据封面；正文使用宽幅数据带，避免密集面板墙"},
+    {"id":"data-pop","name":"波普数据","family":"bold","layout":"pop","description":"钴蓝与酸橙色、黑色粗框、模块拼接、海报式标题","best_for":["decision-brief","evidence-report"],"signature":"标题色块与证据色块拼接；摘要分格；图表与表格有明确黑线边界"},
+    {"id":"oriental-ink","name":"东方留白","family":"bold","layout":"ink","description":"纸白、墨色、朱红题签、中文衬线、竖题与留白","best_for":["evidence-report","process-playbook"],"signature":"桌面竖排题签与横排正文并置；正文连续阅读，章节用细线和留白"},
+    {"id":"clean-table","name":"清晰商务","family":"classic","layout":"classic","description":"白底深蓝、平直分区、完整宽度表格","best_for":["evidence-report","decision-brief"],"signature":"克制的公文式标题与精确表格"},
+    {"id":"light-glass","name":"现代数据","family":"classic","layout":"classic","description":"浅灰底、白色面板、蓝紫分组、相关小图成组","best_for":["evidence-report","scenario-model"],"signature":"浅底数据面板；保留旧参数，不使用玻璃模糊"},
+    {"id":"editorial-brief","name":"温暖编辑","family":"classic","layout":"classic","description":"暖白单栏、衬线标题、连续图文","best_for":["evidence-report","decision-brief"],"signature":"连续单栏长文与温暖纸感"},
+    {"id":"dark-analytics","name":"深色研判","family":"classic","layout":"classic","description":"深蓝灰底、亮蓝重点、清楚的数据区边界","best_for":["evidence-report","scenario-model"],"signature":"适合逐项研判的深色数据面板"}
+  ],
+  "report_kinds": {
+    "decision-brief":{"name":"决策简报","template":"decision-brief.html","slots":["SUMMARY_CONTENT","EVIDENCE_CONTENT","ACTION_CONTENT"]},
+    "evidence-report":{"name":"证据分析","template":"evidence-report.html","slots":["SUMMARY_CONTENT","EVIDENCE_CONTENT","INTERPRETATION_CONTENT","ACTION_CONTENT"]},
+    "process-playbook":{"name":"流程方案","template":"process-playbook.html","slots":["SUMMARY_CONTENT","FLOW_CONTENT","RULES_CONTENT","EXCEPTION_CONTENT","ACTION_CONTENT"]},
+    "scenario-model":{"name":"情景测算","template":"scenario-model.html","slots":["SUMMARY_CONTENT","SCENARIO_CONTENT","METHOD_CONTENT","COMPARISON_CONTENT"]}
+  }
+}
